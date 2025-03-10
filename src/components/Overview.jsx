@@ -1,4 +1,5 @@
 import React from 'react';
+import RevenueChart from './charts/RevenueChart';
 
 const Overview = () => {
   return (
@@ -8,9 +9,7 @@ const Overview = () => {
         {/* Chart card */}
         <div className="bg-white dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm p-6">
           <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">Revenue Overview</h3>
-          <div className="h-64 bg-gray-100 dark:bg-gray-800 rounded flex items-center justify-center">
-            <p className="text-gray-500 dark:text-gray-400">Chart placeholder</p>
-          </div>
+          <RevenueChart />
         </div>
         
         {/* Table card */}
