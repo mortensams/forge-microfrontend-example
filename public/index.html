@@ -38,6 +38,15 @@
         });
       });
     });
+
+    // Create a mock singleSpaNavigate function for standalone mode
+    window.singleSpaNavigate = function(url) {
+      console.log("Navigation in standalone mode:", url);
+      // In standalone mode, we can update the URL without page reload
+      window.history.pushState(null, null, url);
+      // Dispatch an event to notify the app about the URL change
+      window.dispatchEvent(new Event('popstate'));
+    };
   </script>
 </body>
 </html>

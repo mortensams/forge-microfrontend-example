@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Dashboard from './components/Dashboard';
 import Tabs from './components/Tabs';
 
 const RootComponent = (props) => {
   const [activeTab, setActiveTab] = useState('overview');
-  
   const isRunningInPortal = window.singleSpaNavigate !== undefined;
   
   const tabs = [
@@ -12,6 +11,58 @@ const RootComponent = (props) => {
     { id: 'performance', label: 'Performance' },
     { id: 'reports', label: 'Reports' }
   ];
+  
+  // Handle route changes from the portal
+  useEffect(() => {
+    // Parse the current URL to set initial tab
+    const setTabFromUrl = () => {
+      const path = window.location.pathname;
+      if (path.includes('/app/performance')) {
+        setActiveTab('performance');
+      } else if (path.includes('/app/reports')) {
+        setActiveTab('reports');
+      } else {
+        setActiveTab('overview');
+      }
+    };
+    
+    // Set initial tab based on URL
+    setTabFromUrl();
+    
+    // Listen for route changes
+    const handleLocationChange = () => {
+      setTabFromUrl();
+    };
+    
+    window.addEventListener('popstate', handleLocationChange);
+    window.addEventListener('single-spa:routing-event', handleLocationChange);
+    
+    // Cleanup event listeners
+    return () => {
+      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('single-spa:routing-event', handleLocationChange);
+    };
+  }, []);
+  
+  // Handle tab changes within the component (update URL)
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    
+    // If running in portal mode, update URL
+    if (isRunningInPortal && window.singleSpaNavigate) {
+      let newPath;
+      if (tabId === 'overview') {
+        newPath = '/app';
+      } else {
+        newPath = `/app/${tabId}`;
+      }
+      
+      // Only navigate if we're not already on this path to avoid endless loops
+      if (window.location.pathname !== newPath) {
+        window.singleSpaNavigate(newPath);
+      }
+    }
+  };
   
   return (
     <div className="microfrontend-content p-6">
@@ -35,7 +86,7 @@ const RootComponent = (props) => {
         </div>
       )}
       
-      <Tabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
+      <Tabs tabs={tabs} activeTab={activeTab} onTabChange={handleTabChange} />
       
       <div className="mt-6">
         <Dashboard activeTab={activeTab} />
