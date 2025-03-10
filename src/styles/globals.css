@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Use Inter as a fallback font since we can't access the local Geist fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+/* This ensures styles don't clash with the parent application */
+.microfrontend-content {
+  font-family: 'Inter', sans-serif;
+}
+
+.card {
+  @apply bg-white dark:bg-gray-900 rounded-lg shadow-sm border border-gray-200 dark:border-gray-800 p-6;
+}
+
+.card-header {
+  @apply text-lg font-semibold mb-4;
+}
+
+.metric-card {
+  @apply bg-white dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-800 shadow-sm;
+}
+
+.metric-value {
+  @apply text-2xl font-semibold text-gray-900 dark:text-white;
+}
+
+.metric-label {
+  @apply text-sm text-gray-500 dark:text-gray-400;
+}
+
+.tab {
+  @apply px-4 py-2 text-sm font-medium rounded-md transition-colors;
+}
+
+.tab.active {
+  @apply bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400;
+}
+
+.tab:not(.active) {
+  @apply text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800;
+}
+
+.btn {
+  @apply px-4 py-2 rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+.btn-primary {
+  @apply bg-blue-500 text-white hover:bg-blue-600 focus:ring-blue-500;
+}
+
+.btn-secondary {
+  @apply bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 focus:ring-gray-500 dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-700;
+}

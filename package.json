@@ -1,0 +1,36 @@
+{
+  "name": "@forge/microfrontend",
+  "version": "1.0.0",
+  "description": "A React microfrontend for the Forge Portal",
+  "scripts": {
+    "start": "webpack serve --mode development",
+    "build": "webpack --mode production"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "single-spa-react": "^5.1.4",
+    "tailwindcss": "^3.4.1",
+    "postcss": "^8.4.35",
+    "autoprefixer": "^10.4.17",
+    "lucide-react": "^0.335.0",
+    "@remixicon/react": "^4.1.1",
+    "recharts": "^2.12.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.5",
+    "@babel/preset-env": "^7.22.5",
+    "@babel/preset-react": "^7.22.5",
+    "@babel/preset-typescript": "^7.22.5",
+    "babel-loader": "^9.1.2",
+    "css-loader": "^6.8.1",
+    "style-loader": "^3.3.3",
+    "postcss-loader": "^8.1.0",
+    "html-webpack-plugin": "^5.5.3",
+    "webpack": "^5.88.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1",
+    "typescript": "^5.4.2",
+    "ts-loader": "^9.5.1"
+  }
+}
