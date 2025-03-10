@@ -17,6 +17,20 @@
   <script src="https://cdn.jsdelivr.net/npm/systemjs@6.14.1/dist/extras/amd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/systemjs@6.14.1/dist/extras/named-exports.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/systemjs@6.14.1/dist/extras/named-register.min.js"></script>
+  <!-- Add single-spa navigation function for standalone mode -->
+  <script>
+    // Import single-spa for the navigation function
+    System.import('single-spa').then(singleSpa => {
+      // Make navigateToUrl available globally
+      window.navigateToUrl = singleSpa.navigateToUrl;
+      
+      // Also add a mock for singleSpaNavigate
+      window.singleSpaNavigate = function(url) {
+        console.log("Navigation in standalone mode:", url);
+        window.navigateToUrl(url);
+      };
+    });
+  </script>
   <!-- Temporary font solution for development -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,28 +39,22 @@
 <body class="h-full antialiased bg-gray-50 dark:bg-gray-950">
   <div id="root" class="h-full"></div>
   <script>
-    // In standalone mode, we need to manually mount the application
-    System.import('./forge-microfrontend.js').then(module => {
-      // Call the bootstrap, mount, and update methods from the single-spa lifecycle
-      module.bootstrap().then(() => {
-        module.mount({
-          domElement: document.getElementById('root'),
-          forgeUser: {
-            name: 'Standalone User',
-            role: 'Viewer'
-          }
+    // Wait for single-spa to be loaded
+    System.import('single-spa').then(() => {
+      // Then load and mount the microfrontend
+      System.import('./forge-microfrontend.js').then(module => {
+        // Call the bootstrap, mount, and update methods from the single-spa lifecycle
+        module.bootstrap().then(() => {
+          module.mount({
+            domElement: document.getElementById('root'),
+            forgeUser: {
+              name: 'Standalone User',
+              role: 'Viewer'
+            }
+          });
         });
       });
     });
-
-    // Create a mock singleSpaNavigate function for standalone mode
-    window.singleSpaNavigate = function(url) {
-      console.log("Navigation in standalone mode:", url);
-      // In standalone mode, we can update the URL without page reload
-      window.history.pushState(null, null, url);
-      // Dispatch an event to notify the app about the URL change
-      window.dispatchEvent(new Event('popstate'));
-    };
   </script>
 </body>
 </html>

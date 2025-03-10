@@ -4,7 +4,7 @@ import Tabs from './components/Tabs';
 
 const RootComponent = (props) => {
   const [activeTab, setActiveTab] = useState('overview');
-  const isRunningInPortal = window.singleSpaNavigate !== undefined;
+  const isRunningInPortal = typeof window.singleSpaNavigate !== 'undefined';
   
   const tabs = [
     { id: 'overview', label: 'Overview' },
@@ -49,7 +49,7 @@ const RootComponent = (props) => {
     setActiveTab(tabId);
     
     // If running in portal mode, update URL
-    if (isRunningInPortal && window.singleSpaNavigate) {
+    if (isRunningInPortal) {
       let newPath;
       if (tabId === 'overview') {
         newPath = '/app';
@@ -59,7 +59,15 @@ const RootComponent = (props) => {
       
       // Only navigate if we're not already on this path to avoid endless loops
       if (window.location.pathname !== newPath) {
-        window.singleSpaNavigate(newPath);
+        // Check which navigation function is available
+        if (typeof window.navigateToUrl === 'function') {
+          window.navigateToUrl(newPath);
+        } else if (typeof window.singleSpaNavigate === 'function') {
+          window.singleSpaNavigate(newPath);
+        } else {
+          // Fallback to regular navigation if neither is available
+          window.history.pushState(null, '', newPath);
+        }
       }
     }
   };
